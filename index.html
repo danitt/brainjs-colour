@@ -50,7 +50,7 @@
           color[key] = +(color[key]/255).toFixed(2);
         });
         const output = net.run(color);
-        const result = result.white > result.black ? 'white' : 'black';
+        const result = output.white > output.black ? 'white' : 'black';
         document.body.style.color = result;
         console.info(`Best contrast for colour ${e.target.value} is ${result}`);
       }
