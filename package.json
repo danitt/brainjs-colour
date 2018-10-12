@@ -1,0 +1,18 @@
+{
+  "name": "brainjs-colour",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "ts-node colour"
+  },
+  "dependencies": {
+    "@types/node": "^10.11.7",
+    "brain.js": "^1.4.2",
+    "colornames": "^1.1.1",
+    "inquirer": "^6.2.0",
+    "ora": "^3.0.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.3"
+  }
+}

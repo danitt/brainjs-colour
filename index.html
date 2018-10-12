@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <style>
+      body {
+        min-height: 100vh;
+        background: black;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 1.5em;
+        font-family: 'Raleway', sans-serif;
+        transition: color 200ms ease;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Example</h1>
+      Choose a colour: <input type="color" id="colour">
+    </div>
+
+    <!-- The "Magic"-->
+    <script type="text/javascript" src="./node_modules/brain.js/browser.js"></script>
+    <script type="text/javascript">
+      // First train the neural network
+      const net = new brain.NeuralNetwork();
+      net.train([
+        {input: { r: 0.0, g: 0.0, b: 0.0 }, output: { white: 1 }},
+        {input: { r: 1.0, g: 1.0, b: 1.0 }, output: { black: 1 }},
+        {input: { r: 0.03, g: 0.7, b: 0.5 }, output: { black: 1 }},
+        {input: { r: 0.16, g: 0.09, b: 0.2 }, output: { white: 1 }},
+        {input: { r: 0.5, g: 0.5, b: 1.0 }, output: { white: 1 }},
+        {input: { r: 0.07, g: 0.34, b: 0.0 }, output: { white: 1 }},
+        {input: { r: 1.0, g: 0.50, b: 0.50 }, output: { black: 1 }}
+      ]);
+      
+      
+      /**
+       * COLOUR HANDLING
+       */
+      const input = document.getElementById('colour');
+
+      function changeColour(e) {
+        document.body.style.backgroundColor = e.target.value;
+        color = hexToRgb(e.target.value);
+        Object.keys(color).map((key, index) => {
+          color[key] = +(color[key]/255).toFixed(2);
+        });
+        const output = net.run(color);
+        const result = result.white > result.black ? 'white' : 'black';
+        document.body.style.color = result;
+        console.info(`Best contrast for colour ${e.target.value} is ${result}`);
+      }
+
+      function hexToRgb(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null;
+      }
+
+      input.addEventListener('input', changeColour);
+    </script>
+  </body>
+</html>
